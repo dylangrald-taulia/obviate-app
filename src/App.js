@@ -1,22 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 function App() {
+
+  const url = '//localhost:8000/'
+
+  const makeRequest = () => {
+    axios.get(url)
+      .then(response => {
+        window.console.log(response)
+      })
+      .catch(error => {
+        window.console.log(error)
+      })
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Obviation</h1>
+        <button onClick={() => makeRequest()}>Hello?</button>
       </header>
     </div>
   );
