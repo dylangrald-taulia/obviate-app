@@ -1,5 +1,6 @@
 import './App.css';
 import axios from 'axios';
+import TestForm from './components/TestForm';
 
 function App() {
 
@@ -19,8 +20,12 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Obviation</h1>
-        <button onClick={() => makeRequest()}>Hello?</button>
       </header>
+      <div>
+        <label>This is a sanity check: </label>
+        <button onClick={() => makeRequest()}>Make GET Request</button>
+      </div>
+      <TestForm />
     </div>
   );
 }
