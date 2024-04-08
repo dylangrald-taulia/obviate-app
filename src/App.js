@@ -1,10 +1,25 @@
+import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import TestForm from './components/TestForm';
 
 function App() {
 
+  const [testRequest, setTestRequest] = useState({
+    uuId: '',
+    fileName: '',
+    status: '',
+  })
+
   const url = '//localhost:8000/'
+
+  React.useEffect(() => {
+    window.console.log(testRequest)
+  }, [testRequest])
+
+  const updateTestRequest = (newTestRequest) => {
+    setTestRequest(newTestRequest)
+  }
 
   const makeRequest = () => {
     axios.get(url)
@@ -25,7 +40,7 @@ function App() {
         <label>This is a sanity check: </label>
         <button onClick={() => makeRequest()}>Make GET Request</button>
       </div>
-      <TestForm />
+      <TestForm setTestRequest={updateTestRequest} />
     </div>
   );
 }
