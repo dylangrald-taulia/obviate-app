@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import TestForm from './components/TestForm';
+import TestStatusIcon from './components/TestStatusIcon';
 
 function App() {
 
   const [testRequest, setTestRequest] = useState({
     uuId: '',
     fileName: '',
-    status: '',
+    loading: false,
   })
 
   const url = '//localhost:8000/'
@@ -41,6 +42,7 @@ function App() {
         <button onClick={() => makeRequest()}>Make GET Request</button>
       </div>
       <TestForm setTestRequest={updateTestRequest} />
+      <TestStatusIcon testRequest={testRequest} />
     </div>
   );
 }
