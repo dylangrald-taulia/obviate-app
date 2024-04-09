@@ -6,6 +6,7 @@ function TestForm({setTestRequest}) {
     const [file, setFile] = useState(null);
     const [fileContent, setFileContent] = useState('');
     const [fileName, setFileName] = useState('');
+    const [promptDetails, setPromptDetails] = useState('');
 
     const url = '//localhost:8000/create-prompt-async/'
 
@@ -15,6 +16,24 @@ function TestForm({setTestRequest}) {
             readFile(file);
         }
     }, [file]);
+
+    const readFile = (file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            setFileContent(e.target.result);
+        }
+        reader.readAsText(file);
+    }
+
+    const uploadFileField = (
+        <div>
+            <label>Upload File:</label>
+            <input
+                type="file"
+                onChange={(e) => setFile(e.target.files[0])}
+            />
+        </div>
+    );
 
     const testTypeOptions = ['unit']
 
@@ -32,21 +51,19 @@ function TestForm({setTestRequest}) {
         );
     });
 
-    const uploadFileField = (
+    const promptDetailsInput = (
         <div>
-            <label>Upload File:</label>
-            <input
-                type="file"
-                onChange={(e) => setFile(e.target.files[0])}
+            <label>Optional Prompt Details:</label>
+            <textarea
+                value={promptDetails}
+                onChange={(e) => setPromptDetails(e.target.value)}
             />
         </div>
     );
 
-    async function submit() {
-        if (valid()) {
-            makeRequest();
-        }
-    }
+    const submitButton = (
+        <button onClick={() => submit()}>Submit</button>
+    );
 
     const valid = () => {
         if (testType === '') {
@@ -64,12 +81,10 @@ function TestForm({setTestRequest}) {
         return true;
     }
 
-    const readFile = (file) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            setFileContent(e.target.result);
+    async function submit() {
+        if (valid()) {
+            makeRequest();
         }
-        reader.readAsText(file);
     }
 
     const makeRequest = () => {
@@ -78,7 +93,7 @@ function TestForm({setTestRequest}) {
                 'content': fileContent,
                 'name': fileName
             },
-            'prompt': `Generate a Groovy ${testType} test for the provided content.`,
+            'prompt': `Generate a Groovy ${testType} test for the provided content.` + (promptDetails ? ` ${promptDetails}` : ''),
             'additional_files': []
         }, {
             headers: {
@@ -98,10 +113,6 @@ function TestForm({setTestRequest}) {
           })
     }
 
-    const submitButton = (
-        <button onClick={() => submit()}>Submit</button>
-    );
-
     return (
         <div>
             <div>
@@ -110,6 +121,9 @@ function TestForm({setTestRequest}) {
             </div>
             <div>
                 {uploadFileField}
+            </div>
+            <div>
+                {promptDetailsInput}
             </div>
             <div>
                 {submitButton}
