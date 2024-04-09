@@ -1,23 +1,25 @@
 import React from 'react';
 
 function TestStatusIcon({testRequest}) {
-    const uuId = testRequest.uuId;
-    const loading = testRequest.loading;
-    const fileName = testRequest.fileName;
+    if (testRequest.length === 0) return null
 
-    if (!uuId) return null;
-    
-    let icon = null;
-    if (loading) {
-        icon = <div>
-            <p>Test for {fileName} is being created...</p>
+    const icons = testRequest.map((test) => {
+        if (test.status === 'loading') {
+            return (
+                <div key={test.uuId}>
+                    <span>{`Generating test for ${test.fileName}`}</span>
+                </div>
+            )
+        } else {
+            return null
+        }
+    })
+
+    return (
+        <div>
+            {icons}
         </div>
-    } else {
-        icon = <div>
-            <p>Test for {fileName} has been created!</p>
-        </div>
-    }
-    return icon;
+    )
 }
 
 export default TestStatusIcon;

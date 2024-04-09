@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function TestForm({setTestRequest}) {
+function TestForm({setTestRequest, testRequest}) {
     const [testType, setTestType] = useState('');
     const [file, setFile] = useState(null);
     const [fileContent, setFileContent] = useState('');
@@ -102,11 +102,11 @@ function TestForm({setTestRequest}) {
         })
           .then(response => {
             window.console.log(response)
-            setTestRequest({
+            setTestRequest(testRequest.concat({
                 uuId: response.data.job_uuid,
                 fileName: fileName,
-                loading: response.data.loading,
-            })
+                status: response.data.loading ? 'loading' : 'error',
+            }))
           })
           .catch(error => {
             window.console.log(error)

@@ -6,11 +6,7 @@ import TestStatusIcon from './components/TestStatusIcon';
 
 function App() {
 
-  const [testRequest, setTestRequest] = useState({
-    uuId: '',
-    fileName: '',
-    loading: false,
-  })
+  const [testRequest, setTestRequest] = useState([])
 
   const url = '//localhost:8000/'
 
@@ -41,7 +37,7 @@ function App() {
         <label>This is a sanity check: </label>
         <button onClick={() => makeRequest()}>Make GET Request</button>
       </div>
-      <TestForm setTestRequest={updateTestRequest} />
+      <TestForm setTestRequest={updateTestRequest} testRequest={testRequest} />
       <TestStatusIcon testRequest={testRequest} />
     </div>
   );
