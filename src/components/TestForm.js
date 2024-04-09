@@ -7,8 +7,52 @@ function TestForm({setTestRequest, testRequest}) {
     const [fileContent, setFileContent] = useState('');
     const [fileName, setFileName] = useState('');
     const [promptDetails, setPromptDetails] = useState('');
+    const [code, setCode] = useState(''); 
+
+    const axiosGetClient = axios.create({});
+
+    const MAX_RETRY = 10;
+    let currentRetry = 0;
 
     const url = '//localhost:8000/create-prompt-async/'
+
+    function successHandler() {
+        console.log('Data is Ready');
+        console.log('Code: '+code);
+    }
+
+    async function errorHandler() {
+        if (currentRetry < MAX_RETRY) {
+          currentRetry++;
+          console.log('Retrying...');
+          sendWithRetry();
+        } else {
+          console.log('Retried several times but still failed');
+        }
+      }
+            
+    async function sendWithRetry() {
+
+        await new Promise(r => setTimeout(r, 20000));
+
+        testRequest?.forEach(element => {
+            console.log('Sending request...'+element.uuId);
+            axiosGetClient.get(`http://localhost:8000/job/${element.uuId}`)
+            .then(successHandler).catch(errorHandler);
+        });
+
+    }
+      
+    axiosGetClient.interceptors.response.use(function (response) {
+        if(response.data.status !== 'Ready') { 
+          throw new axios.Error("Error fetching the data"); 
+        } else {
+          setCode(response.data.answer.code);
+          return response;
+        }
+      }, function (error) {
+        return Promise.reject(error);
+    });
 
     React.useEffect(() => {
         if (file) {
@@ -16,6 +60,10 @@ function TestForm({setTestRequest, testRequest}) {
             readFile(file);
         }
     }, [file]);
+
+    React.useEffect(() => {
+         sendWithRetry();
+    },[testRequest])
 
     const readFile = (file) => {
         const reader = new FileReader();
