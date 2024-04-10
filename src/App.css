@@ -35,3 +35,24 @@
     transform: rotate(360deg);
   }
 }
+
+.results-div {
+  margin-top: 30px;
+  border-top: 1px solid #000;
+}
+
+.single-result-div {
+  margin-top: 20px;
+  border-top: 1px solid #000;
+}
+
+.single-result-div pre code {
+  display: block;
+  background: none;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: scroll;
+  max-width: 100%;
+  min-width: 100px;
+  padding: 0;
+}

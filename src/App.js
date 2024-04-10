@@ -3,10 +3,12 @@ import './App.css';
 import axios from 'axios';
 import TestForm from './components/TestForm';
 import TestStatusIcon from './components/TestStatusIcon';
+import CodeDisplay from './components/CodeDisplay';
 
 function App() {
 
   const [testRequest, setTestRequest] = useState([])
+  const [testResults, setTestResults] = useState([])
 
   const url = '//localhost:8000/'
 
@@ -39,6 +41,7 @@ function App() {
       </div>
       <TestForm setTestRequest={updateTestRequest} testRequest={testRequest} />
       <TestStatusIcon testRequest={testRequest} />
+      <CodeDisplay testResults={testResults} setTestResults={setTestResults} />
     </div>
   );
 }
