@@ -83,7 +83,7 @@ function TestForm({setTestRequest, testRequest}) {
         </div>
     );
 
-    const testTypeOptions = ['unit']
+    const testTypeOptions = ['Groovy Unit Test', 'JavaScript Unit Test']
 
     const testTypeRadioButtons = testTypeOptions.map((option) => {
         return (
@@ -141,7 +141,7 @@ function TestForm({setTestRequest, testRequest}) {
                 'content': fileContent,
                 'name': fileName
             },
-            'prompt': `Generate a Groovy ${testType} test for the provided content.` + (promptDetails ? ` ${promptDetails}` : ''),
+            'prompt': `Generate a ${testType} for the provided content.` + (promptDetails ? ` ${promptDetails}` : ''),
             'additional_files': []
         }, {
             headers: {
