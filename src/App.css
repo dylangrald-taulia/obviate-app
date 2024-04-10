@@ -36,6 +36,41 @@
   }
 }
 
+.test-form-div {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  align-items: center;
+}
+
+.test-form-div h4 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.submit-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.prompt-details-input {
+  padding: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: 1px solid #000;
+  border-radius: 5px;
+  width: 50%;
+  height: 6rem;
+}
+
 .results-div {
   margin-top: 30px;
   border-top: 1px solid #000;

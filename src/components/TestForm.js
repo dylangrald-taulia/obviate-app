@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../App.css';
 
 function TestForm({setTestRequest, testRequest}) {
     const [testType, setTestType] = useState('');
@@ -74,13 +75,13 @@ function TestForm({setTestRequest, testRequest}) {
     }
 
     const uploadFileField = (
-        <div>
-            <label>Upload File:</label>
+        <>
+            <h4>Upload File</h4>
             <input
                 type="file"
                 onChange={(e) => setFile(e.target.files[0])}
             />
-        </div>
+        </>
     );
 
     const testTypeOptions = ['Groovy Unit Test', 'JavaScript Unit Test']
@@ -89,6 +90,7 @@ function TestForm({setTestRequest, testRequest}) {
         return (
             <label key={option}>
                 <input
+                className='test-type-radio-button'
                     type="radio"
                     value={option}
                     checked={testType === option}
@@ -100,17 +102,18 @@ function TestForm({setTestRequest, testRequest}) {
     });
 
     const promptDetailsInput = (
-        <div>
-            <label>Optional Prompt Details:</label>
+        <>
+            <h4>Optional Prompt Details</h4>
             <textarea
+                className='prompt-details-input'
                 value={promptDetails}
                 onChange={(e) => setPromptDetails(e.target.value)}
             />
-        </div>
+        </>
     );
 
     const submitButton = (
-        <button onClick={() => submit()}>Submit</button>
+        <button className='submit-button' onClick={() => submit()}>Submit</button>
     );
 
     const valid = () => {
@@ -155,6 +158,11 @@ function TestForm({setTestRequest, testRequest}) {
                 fileName: fileName,
                 status: response.data.loading ? 'loading' : 'error',
             }))
+            setFile(null);
+            setFileContent('');
+            setFileName('');
+            setPromptDetails('');
+            setTestType('');
           })
           .catch(error => {
             window.console.log(error)
@@ -162,20 +170,12 @@ function TestForm({setTestRequest, testRequest}) {
     }
 
     return (
-        <div>
-            <div>
-                <label>Test Type:</label>
+        <div className='test-form-div'>
+                <h4>Test Type</h4>
                 {testTypeRadioButtons}
-            </div>
-            <div>
                 {uploadFileField}
-            </div>
-            <div>
                 {promptDetailsInput}
-            </div>
-            <div>
                 {submitButton}
-            </div>
         </div>
     );
 }
