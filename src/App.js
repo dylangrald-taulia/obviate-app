@@ -40,7 +40,7 @@ function App() {
         <button onClick={() => makeRequest()}>Make GET Request</button>
       </div>
       <TestForm setTestRequest={updateTestRequest} testRequest={testRequest} />
-      <TestStatusIcon testRequest={testRequest} />
+      <TestStatusIcon testRequest={testRequest} setTestRequest={setTestRequest} />
       <CodeDisplay testResults={testResults} setTestResults={setTestResults} />
     </div>
   );
