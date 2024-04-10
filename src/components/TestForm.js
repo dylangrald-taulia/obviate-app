@@ -9,7 +9,8 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults}) {
     const [fileName, setFileName] = useState('');
     const [promptDetails, setPromptDetails] = useState('');
     const [testProcess, setTestProcess] = useState({});
-    const [code, setCode] = useState(''); 
+    const [code, setCode] = useState('');
+    const [testLanguage, setTestLanguage] = useState('');
 
     const axiosGetClient = axios.create({});
 
@@ -126,6 +127,15 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults}) {
         </>
     );
 
+    const updateTestType = (type) => {
+        setTestType(type);
+        if (type === 'Groovy Unit Test') {
+            setTestLanguage('Groovy');
+        } else {
+            setTestLanguage('JavaScript');
+        }
+    }
+
     const testTypeOptions = ['Groovy Unit Test', 'JavaScript Unit Test']
 
     const testTypeRadioButtons = testTypeOptions.map((option) => {
@@ -136,7 +146,7 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults}) {
                     type="radio"
                     value={option}
                     checked={testType === option}
-                    onChange={(e) => setTestType(e.target.value)}
+                    onChange={(e) => updateTestType(e.target.value)}
                 />
                 {option}
             </label>
@@ -187,6 +197,7 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults}) {
                 'name': fileName
             },
             'prompt': `Generate a ${testType} for the provided content.` + (promptDetails ? ` ${promptDetails}` : ''),
+            'test_type': testLanguage,
             'additional_files': []
         }, {
             headers: {
