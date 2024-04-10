@@ -1,54 +1,75 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import '../App.css';
 
-function TestForm({setTestRequest, testRequest}) {
+function TestForm({setTestRequest, testRequest, testResults, setTestResults}) {
     const [testType, setTestType] = useState('');
     const [file, setFile] = useState(null);
     const [fileContent, setFileContent] = useState('');
     const [fileName, setFileName] = useState('');
     const [promptDetails, setPromptDetails] = useState('');
+    const [testProcess, setTestProcess] = useState({});
     const [code, setCode] = useState(''); 
 
     const axiosGetClient = axios.create({});
 
     const MAX_RETRY = 10;
-    let currentRetry = 0;
+    // let currentRetry = 0;
 
     const url = '//localhost:8000/create-prompt-async/'
+    const getJobUrl = `http://localhost:8000/job/`
 
     function successHandler() {
         console.log('Data is Ready');
         console.log('Code: '+code);
     }
 
-    async function errorHandler() {
+    async function errorHandler(uuId, currentRetry) {
         if (currentRetry < MAX_RETRY) {
-          currentRetry++;
+        //   currentRetry++;
+          setTestProcess({...testProcess, [uuId]: {currentRetry: currentRetry + 1, sentWithRetry: true}});
           console.log('Retrying...');
-          sendWithRetry();
+          sendWithRetry(uuId);
         } else {
           console.log('Retried several times but still failed');
         }
       }
             
-    async function sendWithRetry() {
+    async function sendWithRetry(uuId) {
 
         await new Promise(r => setTimeout(r, 20000));
 
-        testRequest?.forEach(element => {
-            console.log('Sending request...'+element.uuId);
-            axiosGetClient.get(`http://localhost:8000/job/${element.uuId}`)
-            .then(successHandler).catch(errorHandler);
-        });
+        // testRequest?.forEach(element => {
+        //     console.log('Sending request...'+element.uuId);
+        //     axiosGetClient.get(`http://localhost:8000/job/${element.uuId}`)
+        //     .then(successHandler).catch(errorHandler);
+        // });
 
+        // Object.keys(testProcess).forEach((key) => {
+        //     console.log('Sending request...'+key);
+        //     axiosGetClient.get(`${getJobUrl}${key}`)
+        //     .then(successHandler(uuId)).catch(errorHandler(key, testProcess[key].currentRetry));
+        // })
+
+        console.log('Sending request...'+uuId);
+        window.console.log('Current Retry: '+testProcess[uuId].currentRetry);
+        axiosGetClient.get(`${getJobUrl}${uuId}`)
+            .then(successHandler(uuId))
+            .catch(errorHandler(uuId, testProcess[uuId].currentRetry))
+            .catch((error) => {
+                console.log('Error: '+error);
+            });
     }
       
     axiosGetClient.interceptors.response.use(function (response) {
+        window.console.log('Response: '+response.data.status);
+        window.console.log('Response: '+response);
         if(response.data.status !== 'Ready') { 
-          throw new axios.Error("Error fetching the data"); 
+          throw new AxiosError("Error fetching the data"); 
         } else {
           setCode(response.data.answer.code);
+          setTestRequest({...testRequest, [response.data.job_uuid]: {...testRequest[response.data.job_uuid], status: 'ready'}});
+          setTestResults([...testResults, {fileName: testRequest[response.data.job_uuid].fileName, code: response.data.answer.code, uuId: response.data.job_uuid}])
           return response;
         }
       }, function (error) {
@@ -63,8 +84,29 @@ function TestForm({setTestRequest, testRequest}) {
     }, [file]);
 
     React.useEffect(() => {
-         sendWithRetry();
+        Object.keys(testRequest).forEach((key) => {
+            if (!testRequest[key].tried && testRequest[key].status === 'loading') {
+                window.console.log('Validating request...');
+                window.console.log(`test request key: ${testRequest[key]}`);
+                setTestProcess({...testProcess, [key]: {
+                    ...testProcess[key],
+                    currentRetry: 0,
+                    sentWithRetry: false,
+                }});
+                setTestRequest({...testRequest, [key]: {...testRequest[key], tried: true}});
+            }
+        });
     },[testRequest])
+
+    React.useEffect(() => {
+        window.console.log(testProcess);
+        Object.keys(testProcess).forEach((key) => {
+            if (!testProcess[key].sentWithRetry) {
+                sendWithRetry(key);
+                setTestProcess({...testProcess, [key]: {...testProcess[key], sentWithRetry: true}});
+            }
+        });
+    }, [testProcess])
 
     const readFile = (file) => {
         const reader = new FileReader();
@@ -153,11 +195,12 @@ function TestForm({setTestRequest, testRequest}) {
         })
           .then(response => {
             window.console.log(response)
-            setTestRequest(testRequest.concat({
-                uuId: response.data.job_uuid,
+            setTestRequest({...testRequest, [response.data.job_uuid]: {
                 fileName: fileName,
-                status: response.data.loading ? 'loading' : 'error',
-            }))
+                status: 'loading',
+                tried: false,
+            }
+            })
             setFile(null);
             setFileContent('');
             setFileName('');

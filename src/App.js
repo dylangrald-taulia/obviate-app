@@ -7,12 +7,12 @@ import CodeDisplay from './components/CodeDisplay';
 
 function App() {
 
-  const [testRequest, setTestRequest] = useState([])
+  const [testRequest, setTestRequest] = useState({})
   const [testResults, setTestResults] = useState([])
 
-  React.useEffect(() => {
-    window.console.log(testRequest)
-  }, [testRequest])
+  // React.useEffect(() => {
+  //   window.console.log(testRequest)
+  // }, [testRequest])
 
   const updateTestRequest = (newTestRequest) => {
     setTestRequest(newTestRequest)
@@ -23,7 +23,7 @@ function App() {
       <header className="App-header">
         <h1>Obviation</h1>
       </header>
-      <TestForm setTestRequest={updateTestRequest} testRequest={testRequest} />
+      <TestForm setTestRequest={updateTestRequest} testRequest={testRequest} testResults={testResults} setTestResults={setTestResults} />
       <TestStatusIcon testRequest={testRequest} setTestRequest={setTestRequest} />
       <CodeDisplay testResults={testResults} setTestResults={setTestResults} />
     </div>
