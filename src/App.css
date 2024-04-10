@@ -56,3 +56,25 @@
   min-width: 100px;
   padding: 0;
 }
+
+.test-request-icons-div {
+  margin-top: 30px;
+  border-top: 1px solid #000;
+}
+
+.test-request-icon span {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.test-request-icon .icon-orange {
+  color: orange;
+}
+
+.test-request-icon .icon-green {
+  color: green;
+}
+
+.test-request-icon .icon-red {
+  color: red;
+}
