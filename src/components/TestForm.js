@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import '../App.css';
 
-function TestForm({setTestRequest, testRequest, testResults, setTestResults}) {
+function TestForm({setTestRequest, testRequest, testResults, setTestResults, promptDetails, setPromptDetails}) {
     const [testType, setTestType] = useState('');
     const [file, setFile] = useState(null);
     const [fileContent, setFileContent] = useState('');
     const [fileName, setFileName] = useState('');
-    const [promptDetails, setPromptDetails] = useState('');
     const [testProcess, setTestProcess] = useState({});
     const [code, setCode] = useState('');
     const [testLanguage, setTestLanguage] = useState('');
