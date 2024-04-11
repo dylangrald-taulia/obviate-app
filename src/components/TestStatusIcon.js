@@ -1,27 +1,9 @@
 import React from 'react';
 import '../App.css';
 
-function TestStatusIcon({testRequest, setTestRequest}) {
-
-    // remove this
-    // useEffect(() => {
-    //     setTestRequest({...testRequest, '123456': {
-    //         fileName: 'LoadingTestIcon.groovy',
-    //         status: 'loading',
-    //         tried: false,
-    //     },
-    //     '123457': {
-    //         fileName: 'ReadyTestIcon.groovy',
-    //         status: 'ready',
-    //         tried: true,
-    //     },
-    //     '123458': {
-    //         fileName: 'ErrorTestIcon.groovy',
-    //         status: 'error',
-    //         tried: true,
-    //     }})
-    // }, [])
-
+function TestStatusIcon({testRequest}) {
+  
+  if (Object.keys(testRequest).length === 0) return null
 
     const handleSaveFile = (codeToSave, fileName) => {
         if(!codeToSave) {
@@ -46,8 +28,6 @@ function TestStatusIcon({testRequest, setTestRequest}) {
         URL.revokeObjectURL(url);
         document.body.removeChild(a);
     };
-
-    if (testRequest.length === 0) return null
 
     const icons = Object.keys(testRequest).map((key) => {
         if (testRequest[key].status === 'loading') {
