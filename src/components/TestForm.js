@@ -10,6 +10,7 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults, pro
     const [testProcess, setTestProcess] = useState({});
     const [code, setCode] = useState('');
     const [testLanguage, setTestLanguage] = useState('');
+    const [pullAdditionalFiles, setPullAdditionalFiles] = useState(false);
 
     const axiosGetClient = axios.create({});
 
@@ -126,6 +127,17 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults, pro
         </>
     );
 
+    const pullAdditionalFilesCheckbox = (
+        <label>
+        <input
+          type="checkbox"
+          checked={pullAdditionalFiles}
+          onChange={(e) => setPullAdditionalFiles(e.target.value)}
+        />
+        Pull Supplementary Files Via GitHub
+      </label>
+    );
+
     const updateTestType = (type) => {
         setTestType(type);
         if (type === 'Groovy Unit Test') {
@@ -133,7 +145,7 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults, pro
         } else {
             setTestLanguage('JavaScript');
         }
-    }
+    };
 
     const testTypeOptions = ['Groovy Unit Test', 'JavaScript Unit Test']
 
@@ -197,6 +209,7 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults, pro
             },
             'prompt': `Generate a ${testType} for the provided content.` + (promptDetails ? ` ${promptDetails}` : ''),
             'test_type': testLanguage,
+            'pull_additional_files': pullAdditionalFiles,
             'additional_files': []
         }, {
             headers: {
@@ -227,6 +240,7 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults, pro
                 <h4>Test Type</h4>
                 {testTypeRadioButtons}
                 {uploadFileField}
+                {pullAdditionalFilesCheckbox}
                 {promptDetailsInput}
                 {submitButton}
         </div>
