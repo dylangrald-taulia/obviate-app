@@ -22,6 +22,30 @@ function TestStatusIcon({testRequest, setTestRequest}) {
     //     }})
     // }, [])
 
+
+    const handleSaveFile = (codeToSave, fileName) => {
+        if(!codeToSave) {
+            window.alert('File is not available yet. Please wait for the test to finish.');
+            return
+        }
+        // Create a Blob containing the text
+        const blob = new Blob([codeToSave], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        // Create an anchor element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName + '.groovy'; // Set the file name
+        document.body.appendChild(a);
+
+        // Trigger a click event on the anchor element
+        a.click();
+
+        // Cleanup
+        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    };
+
     if (testRequest.length === 0) return null
 
     const icons = Object.keys(testRequest).map((key) => {
@@ -33,13 +57,14 @@ function TestStatusIcon({testRequest, setTestRequest}) {
             )
         } else if (testRequest[key].status === 'ready') {
             return (
-                <div key={key} className='test-request-icon'>
-                    <span className='icon-green'>{`Test for ${testRequest[key].fileName} is ready`}</span>
-                </div>
+              <div key={key} className='test-request-icon'>
+                  <span className='icon-green'>{`Test for ${testRequest[key].fileName} is ready`}</span>
+                  <button onClick={() => handleSaveFile(test.response, test.fileName)}>Save File</button>
+              </div>
             )
         } else {
             return (
-                <div key={key} className='test-request-icon'>
+              <div key={key} className='test-request-icon'>
                     <span className='icon-red'>{`Error generating test for ${testRequest[key].fileName}`}</span>
                 </div>
             )
