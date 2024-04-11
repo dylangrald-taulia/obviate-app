@@ -40,18 +40,6 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults, pro
 
         await new Promise(r => setTimeout(r, 20000));
 
-        // testRequest?.forEach(element => {
-        //     console.log('Sending request...'+element.uuId);
-        //     axiosGetClient.get(`http://localhost:8000/job/${element.uuId}`)
-        //     .then(successHandler).catch(errorHandler);
-        // });
-
-        // Object.keys(testProcess).forEach((key) => {
-        //     console.log('Sending request...'+key);
-        //     axiosGetClient.get(`${getJobUrl}${key}`)
-        //     .then(successHandler(uuId)).catch(errorHandler(key, testProcess[key].currentRetry));
-        // })
-
         console.log('Sending request...'+uuId);
         window.console.log('Current Retry: '+testProcess[uuId].currentRetry);
         axiosGetClient.get(`${getJobUrl}${uuId}`)

@@ -1,28 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import '../App.css';
 
-function TestStatusIcon({testRequest, setTestRequest}) {
+function TestStatusIcon({testRequest}) {
 
-    // remove this
-    // useEffect(() => {
-    //     setTestRequest({...testRequest, '123456': {
-    //         fileName: 'LoadingTestIcon.groovy',
-    //         status: 'loading',
-    //         tried: false,
-    //     },
-    //     '123457': {
-    //         fileName: 'ReadyTestIcon.groovy',
-    //         status: 'ready',
-    //         tried: true,
-    //     },
-    //     '123458': {
-    //         fileName: 'ErrorTestIcon.groovy',
-    //         status: 'error',
-    //         tried: true,
-    //     }})
-    // }, [])
-
-    if (testRequest.length === 0) return null
+    if (Object.keys(testRequest).length === 0) return null
 
     const icons = Object.keys(testRequest).map((key) => {
         if (testRequest[key].status === 'loading') {
