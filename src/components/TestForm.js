@@ -69,7 +69,8 @@ function TestForm({setTestRequest, testRequest, testResults, setTestResults, pro
           throw new AxiosError("Error fetching the data"); 
         } else {
           setCode(response.data.answer.code);
-          setTestRequest({...testRequest, [response.data.job_uuid]: {...testRequest[response.data.job_uuid], status: 'ready'}});
+          setTestRequest({...testRequest, [response.data.job_uuid]: {...testRequest[response.data.job_uuid], status: 'ready', response: response.data.answer.code}});
+          //setTestRequest({...testRequest, [response.data.job_uuid]: {...testRequest[response.data.job_uuid], response: response.data.answer.code}});
           setTestResults([...testResults, {fileName: testRequest[response.data.job_uuid].fileName, code: response.data.answer.code, uuId: response.data.job_uuid}])
           return response;
         }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import '../App.css';
 
 function TestStatusIcon({testRequest, setTestRequest}) {
@@ -35,7 +35,8 @@ function TestStatusIcon({testRequest, setTestRequest}) {
         // Create an anchor element
         const a = document.createElement('a');
         a.href = url;
-        a.download = fileName + '.groovy'; // Set the file name
+        const parts = fileName.split('.');
+        a.download = parts.slice(0, parts.length - 1) + 'Test.' + parts[parts.length - 1]; // Set the file name
         document.body.appendChild(a);
 
         // Trigger a click event on the anchor element
@@ -58,8 +59,8 @@ function TestStatusIcon({testRequest, setTestRequest}) {
         } else if (testRequest[key].status === 'ready') {
             return (
               <div key={key} className='test-request-icon'>
-                  <span className='icon-green'>{`Test for ${testRequest[key].fileName} is ready`}</span>
-                  <button onClick={() => handleSaveFile(test.response, test.fileName)}>Save File</button>
+                  <div className='column'><span className='icon-green'>{`Test for ${testRequest[key].fileName} is ready`}</span></div>
+                  <div className='column'><button onClick={() => handleSaveFile(testRequest[key].response, testRequest[key].fileName)}>Download File</button></div>
               </div>
             )
         } else {
